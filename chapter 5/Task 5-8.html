@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html>
+<body>
+  <script> 
+    var a = parseInt(prompt("Insert number"));
+    var b = 120
+    let totalPrice = b * a;
+    if (totalPrice > 4000) {
+      let cashback = totalPrice * 0.1;
+      totalPrice -= cashback;
+    } else {
+      cashback = 0;
+    }
+    alert(totalPrice + ' KZT');
+  </script>
+</body>
+</html>

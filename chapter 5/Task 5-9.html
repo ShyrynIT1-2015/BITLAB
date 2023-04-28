@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html>
+
+<body>
+    <script>
+        var c = parseInt(prompt("INSERT YOUR AMOUNT IN KZT:"));
+        var choice = parseInt(prompt("1- CONVERT TO USD\n2- CONVERT TO EUR\n3- CONVERT TO GBP"));
+        
+        if (choice == 1) {
+            var bolu = parseFloat(c / 380);
+            alert(c + ' KZT = ' + bolu.toFixed(2) + ' USD');
+        }
+
+        if (choice == 2) {
+            var bolu2 = parseFloat(c / 430);
+            alert(c + ' KZT = ' + bolu2.toFixed(2) + ' EUR');
+        }
+
+        if (choice == 3) {
+            var bolu3 = parseFloat(c / 480);
+            alert(c + ' KZT = ' + bolu3.toFixed(2) + ' GBP');
+        }
+    </script>
+</body>
+
+</html>

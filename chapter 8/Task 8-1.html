@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <title>Task 8-1</title>
+
+    <style>
+        .invalid {
+            border-color: red;
+        }
+
+        .error {
+            height: 25px;
+            color: red;
+        }
+
+        form {
+            text-align: left;
+            margin-top: 30px;
+            display: flex;
+            align-content: space-between;
+            justify-content: space-between;
+            height: 100px;
+            flex-wrap: wrap;
+            width: 20%;
+        }
+
+        .cell {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .sign {
+            margin-left: 60%;
+        }
+    </style>
+
+</head>
+
+<body>
+    <form id="myform">
+        <div class="cell">
+            LOGIN: <input type="text" name="login">
+        </div>
+
+        <div id="loginError" class="error"></div>
+        <div class="cell">
+            PASSWORD: <input type="password" name="password">
+        </div>
+        <div id="passwordError" class="error"></div>
+        
+        <div class="sign">
+            <div></div>
+            <button style="background-color: rgb(46,116,181);  width: 120px; color: white;" onclick="checkUser()">SIGN
+                IN</button>
+        </div>
+
+
+    </form>
+
+
+
+    <script>
+
+        // возмем уже существующий массив объектов с пользователями
+
+        let usersArray = [
+
+            { name: 'Ilyas', login: 'ileke', password: 'ileke123' },
+        ];
+
+
+
+        let logField = myform.elements.login; // logField = элемент ввода логина
+
+        let passField = myform.elements.password; // passField = элемент ввода пароля
+
+
+
+        //вызывается при нажатии на кнопку
+        let authenticated = false;
+
+        function checkUser() {
+
+            if (logField.value == '') // если логин не ввели
+
+                loginError.innerHTML = 'Please enter login';
+
+            console.log("HELLO")
+
+            if (passField.value == '') // если пароль не ввели
+
+                passwordError.innerHTML = 'Please enter password';
+
+
+
+            if (logField.value != '' && passField.value != '') {
+
+
+                for (let u of usersArray) {
+
+                    // если введенные данные есть в нашем массиве
+
+                    if (logField.value == u.login && passField.value == u.password) {
+
+                        alert('You are authenticated'); // выводим Welcome + имя пользователя
+
+                        authenticated = true;
+
+                        break;
+
+                    }
+
+                }
+            }
+        }
+        function callOnBlurLog() {
+
+            if (!logField.value.includes('ileke')) { // если значение НЕ содержит символ @
+
+                logField.classList.add('invalid'); // добавить класс invalid 
+
+                loginError.innerHTML = 'Please enter right login.'; // показываем сообщение о правильном вводе
+
+            }
+
+        }
+
+        logField.onblur = callOnBlurLog; // на событие onblur зовем callOnBlur
+
+        function callOnBlur() {
+
+            if (!passField.value.includes('ileke123')) { // если значение НЕ содержит символ @
+
+                passField.classList.add('invalid'); // добавить класс invalid 
+
+                passwordError.innerHTML = 'Please enter right password.'; // показываем сообщение о правильном вводе
+
+            }
+
+        }
+
+        passField.onblur = callOnBlur; // на событие onblur зовем callOnBlur
+
+
+
+        function callOnFocus() {
+
+            if (logField.classList.contains('invalid')) { // если у элемента есть класс invalid
+                logField.classList.remove("invalid")
+
+                loginError.innerHTML = ""; // убираем сообщение о правильном вводе
+
+            }
+
+        }
+
+        logField.onfocus = callOnFocus;
+
+
+
+
+        // при фокусировке на элемент ввода нужно убирать сообщение об ошибке
+
+        function checkFields() {
+
+            if (event.target == logField)
+
+                loginError.innerHTML = '';
+
+
+
+            if (event.target == passField)
+
+                passwordError.innerHTML = '';
+
+        }
+
+    </script>
+
+</body>
+
+</html>

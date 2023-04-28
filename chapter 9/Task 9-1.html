@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <title>Local Storage</title>
+
+    <style>
+        .crossed {
+            text-decoration: line-through;
+        }
+
+        .invalid {
+            border-color: red;
+        }
+
+        .error {
+            height: 25px;
+            color: red;
+        }
+
+        form {
+            text-align: left;
+            margin-top: 0px;
+            display: flex;
+            align-content: space-around;
+            justify-content: space-between;
+            height: 200px;
+            flex-wrap: wrap;
+            width: 20%;
+
+        }
+
+        .cell {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .sign {
+            margin-left: 0%;
+        }
+    </style>
+
+</head>
+
+<body>
+    <form id="myform">
+        <div class="cell">
+            NAME: <input type="text" name="name">
+        </div>
+
+        <div id="nameError" class="error"></div>
+
+
+        <div class="cell">
+            SURNAME: <input type="text" name="surname">
+        </div>
+        <div id="surnameError" class="error"></div>
+
+        <div class="cell">
+                Country :
+                <select>
+        
+                    <option>Казахстан</option>
+        
+                    <option>Россия</option>
+        
+                    <option>Канада</option>
+        
+                    <option>Китай</option>
+        
+                    <option>США</option>
+        
+                </select>
+
+                <div id="countryError" class="error"></div>
+
+        <div class="cell">
+            PHONE NUMBER: <input type="text" name="phone number">
+        </div>
+        <div id="phonenumberError" class="error"></div>
+        <div id="fruits"></div>
+
+
+
+    </form>
+    <div class="sign">
+        <button style="background-color: black;  width: 80px; height: 40px; color: white;"
+            onclick="addFruit()">REGISTER</button>
+
+        <button style="background-color: rgb(108,117,125);  width: 80px; height: 40px; color: white;"
+            onclick="removeFruit()">SAVE TO DRAFT</button>
+    </div>
+
+    <script>
+        // возмем уже существующий массив объектов с пользователями
+
+        let usersArray = [
+
+            { name: 'Shyryn', surname: 'Toktar', country: 'казахстан', retype: '87479326072' },
+        ];
+
+
+
+        let logField = myform.elements.login; // logField = элемент ввода логина
+
+        let passField = myform.elements.password; // passField = элемент ввода пароля
+
+        let pass2Field = myform.elements.retype;
+
+        //вызывается при нажатии на кнопку
+        let authenticated = false;
+
+        function checkUser() {
+
+            if (logField.value == '') // если логин не ввели
+
+                loginError.innerHTML = 'Please enter login';
+
+
+            if (passField.value == '') // если пароль не ввели
+
+                passwordError.innerHTML = 'Please enter password';
+
+            if (pass2Field.value == '') // если пароль не ввели
+
+                retypeError.innerHTML = 'Please enter retype password';
+
+
+            if (logField.value != '' && passField.value != '' && pass2Field.value != '') {
+                for (let u of usersArray) {
+
+                    // если введенные данные есть в нашем массиве
+
+                    if (logField.value == u.login && passField.value == u.password && pass2Field.value == u.retype) {
+
+                        alert('You are authenticated'); // выводим Welcome + имя пользователя
+
+                        authenticated = true;
+
+                        break;
+                    }
+                }
+            }
+        }
+        function callOnBlurLog() {
+
+            if (!logField.value.includes('@')) { // если значение НЕ содержит символ @
+
+                logField.classList.add('invalid'); // добавить класс invalid 
+
+                loginError.innerHTML = 'Current email is already in use'; // показываем сообщение о правильном вводе
+
+            }
+
+        }
+
+        function callOnFocus() {
+
+            if (logField.classList.contains('invalid')) { // если у элемента есть класс invalid
+                logField.classList.remove("invalid")
+                console.log("hello")
+                loginError.innerHTML = ""; // убираем сообщение о правильном вводе
+
+            }
+
+        }
+
+        logField.onfocus = callOnFocus;
+        logField.onblur = callOnBlurLog; // на событие onblur зовем callOnBlur
+
+        function callOnBlur() {
+
+            if (!passField.value.includes('ileke123')) { // если значение НЕ содержит символ @
+                passField.value.length <= 6;
+                passField.classList.add('invalid'); // добавить класс invalid 
+
+                passwordError.innerHTML = 'Password length at least must be 6 symbols'; // показываем сообщение о правильном вводе
+
+            }
+
+        }
+
+        passField.onblur = callOnBlur; // на событие onblur зовем callOnBlur
+
+
+        function callOnBlurRetype() {
+
+            if (!pass2Field.value.includes('ileke123')) { // если значение НЕ содержит символ @
+                pass2Field.value.length <= 6;
+                pass2Field.classList.add('invalid'); // добавить класс invalid 
+
+                retypeError.innerHTML = 'Passwords are not same'; // показываем сообщение о правильном вводе
+
+            }
+
+        }
+
+        pass2Field.onblur = callOnBlurRetype; // на событие onblur зовем callOnBlur
+
+        let fruitsArray = [];
+
+
+
+        function addFruit() {
+
+            let name = prompt('Enter your name: ');
+
+            let surname = prompt('Enter your surname: ');
+
+            let country = prompt('Enter your country: ');
+
+            let phonenumber = prompt('Enter your phone number: ');
+
+
+            let newFruit = {};
+
+            newFruit.name = name;
+
+            newFruit.surname = parseInt(surname);
+
+            newFruit.country = parseInt(country);
+            newFruit.phonenumber = parseInt(phonenumber);
+
+            fruitsArray.push(newFruit)
+            updateStorage(); //обновляем localStorage после изменения массива
+
+            updateFruitList();
+
+        }
+
+
+
+        function removeFruit() {
+
+            let name = prompt('Enter name to save to draft: ');
+
+
+
+            for (let i = 0; i < fruitsArray.length; i++) {
+
+                if (fruitsArray[i].name == name) {
+
+                    fruitsArray.splice(i, 1);
+
+                    break;
+
+                }
+
+            }
+
+            updateStorage(); //обновляем localStorage после изменения массива
+
+            updateFruitList();
+
+        }
+
+        function removeFruit() {
+
+            let surname = prompt('Enter surname to save to draft: ');
+
+
+
+            for (let i = 0; i < fruitsArray.length; i++) {
+
+                if (fruitsArray[i].surname == surname) {
+
+                    fruitsArray.splice(i, 1);
+
+                    break;
+
+                }
+
+            }
+
+            updateStorage(); //обновляем localStorage после изменения массива
+
+            updateFruitList();
+
+        }
+
+        function removeFruit() {
+
+            let country = prompt('Enter country to save to draft: ');
+
+
+
+            for (let i = 0; i < fruitsArray.length; i++) {
+
+                if (fruitsArray[i].country == name) {
+
+                    fruitsArray.splice(i, 1);
+
+                    break;
+
+                }
+
+            }
+
+            updateStorage(); //обновляем localStorage после изменения массива
+
+            updateFruitList();
+
+        }
+
+        // теперь после каждого изменения массива надо также обновлять localStorage
+
+        function updateStorage() {
+
+            localStorage.fruits = JSON.stringify(fruitsArray);
+
+        }
+
+        function removeFruit() {
+
+            let phonenumber= prompt('Enter phone number to save to draft: ');
+
+
+
+            for (let i = 0; i < fruitsArray.length; i++) {
+
+                if (fruitsArray[i].phonenumber == phonenumber) {
+
+                    fruitsArray.splice(i, 1);
+
+                    break;
+
+                }
+
+            }
+
+            updateStorage(); //обновляем localStorage после изменения массива
+
+            updateFruitList();
+
+        }
+
+
+        function crossFruit() {
+
+            event.target.classList.toggle('crossed');
+
+        }
+
+
+
+        function updateFruitList() {
+
+            fruits.remove();
+
+
+
+            let fruitsDiv = document.createElement('div');
+
+            fruitsDiv.id = 'fruits';
+
+
+
+            for (let f of fruitsArray) {
+
+                let div = document.createElement('div');
+
+                div.innerHTML = '<p>' + f.name + ' - ' + f.kilo +  ' - ' + f.country + ' - ' + f.phonenumber + ' </p>'
+
+                div.className = "fruitDiv";
+
+                fruitsDiv.append(div);
+
+
+
+                // при dblclick на элементе div или его дочерних элементах вызываем crossFruit
+
+                div.addEventListener('dblclick', crossFruit);
+
+            }
+
+            document.body.append(fruitsDiv);
+
+        }
+
+    </script>
+
+</body>
+
+</html>
